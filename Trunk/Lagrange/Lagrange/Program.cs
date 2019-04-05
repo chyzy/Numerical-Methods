@@ -10,19 +10,28 @@ namespace Lagrange
         static void Main(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+            
+            do
+            {
+                Console.Clear();
+                IPointsDecoder pointsDecoder = new PointDecoder();
+                ILagrangeEngine lagrangeEngine = new DefaultLagrangeEngine();
 
-            IPointsDecoder pointsDecoder = new PointDecoder();
-            ILagrangeEngine lagrangeEngine = new DefaultLagrangeEngine();
+                Console.WriteLine("Please enter known points in format like: L(1)=2, L(3)=3.5, L(5.2)=6");
+                var points = pointsDecoder.DecodeToPoints(Console.ReadLine());
 
-            Console.WriteLine("Please enter known points in format like: L(1)=2, L(3)=3.5, L(5.2)=6");         
-            var points = pointsDecoder.DecodeToPoints(Console.ReadLine());
+                Console.WriteLine("Please enter the point for which you want to find the value in format like: L(3)=");
+                var targetPointString = Console.ReadLine();
+                var targetPoint = pointsDecoder.TakeArgument(targetPointString);
+                Console.CursorTop--;
+                Console.CursorLeft = targetPointString.Length;
 
-            Console.WriteLine("Please enter the point for which you want to find the value in format like: x=4");
-            var targetPoint = pointsDecoder.DecodeToSingleX(Console.ReadLine());
+                var result = lagrangeEngine.CalculateLagrange(points, targetPoint);
+                Console.Write(result);
 
-            var result = lagrangeEngine.CalculateLagrange(points, targetPoint);
-            Console.WriteLine($"L({targetPoint})={result}");        
-            Console.ReadLine();
+                Console.WriteLine("\n\nPress any key to try again or ESCAPE to exit");
+            } while (Console.ReadKey().Key != ConsoleKey.Escape);
+
         }
 
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)

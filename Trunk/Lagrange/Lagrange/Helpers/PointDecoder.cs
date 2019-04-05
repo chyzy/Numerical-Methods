@@ -12,23 +12,25 @@ namespace Lagrange.Helpers
         {
             foreach (var equation in pointsString.Trim().Split(','))
             {
-                if(!double.TryParse(equation.Split('(')[1].Split(')')[0],out double x))
-                    throw new FormatException();
-                
-                if(!double.TryParse(equation.Split('=')[1],out double y))
-                    throw new FormatException();
+                var x = (this as IPointsDecoder).TakeArgument(equation);
+                var y = (this as IPointsDecoder).TakeValue(equation);
 
                 yield return new Point(x,y);
             }
         }
 
-
-        double IPointsDecoder.DecodeToSingleX(string equation)
+        double IPointsDecoder.TakeArgument(string equation)
         {
-
-            if(!double.TryParse(equation.Trim().Split('=')[1],out double result))
+            if (!double.TryParse(equation.Split('(')[1].Split(')')[0], out double x))
                 throw new FormatException();
-            return result;
+            return x;
+        }
+
+        double IPointsDecoder.TakeValue(string equation)
+        {
+            if (!double.TryParse(equation.Split('=')[1], out double y))
+                throw new FormatException();
+            return y;
         }
     }
 }
