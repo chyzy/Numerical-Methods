@@ -10,13 +10,23 @@ namespace Lagrange
         static void Main(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
-            
-            do
-            {
-                Console.Clear();
-                IPointsDecoder pointsDecoder = new PointDecoder();
-                ILagrangeEngine lagrangeEngine = new DefaultLagrangeEngine();
+            IPointsDecoder pointsDecoder = new PointDecoder();
+            ILagrangeEngine lagrangeEngine = new DefaultLagrangeEngine();
 
+            var sample = "L(0)=7, L(1)=3, L(2)=-1, L(4)=3, L(5)=-3";
+            var sampleResult = lagrangeEngine.CalculateLagrange(pointsDecoder.DecodeToPoints(sample),3);
+            Console.WriteLine($"L(3)={sampleResult} where {sample}");
+
+
+
+            while (true)
+            {
+                Console.WriteLine("Press 1 if you want test your own sample");
+                var key = Console.ReadKey().Key;
+                if(key!=ConsoleKey.D1)
+                    break;
+                Console.Clear();
+               
                 Console.WriteLine("Please enter known points in format like: L(1)=2, L(3)=3.5, L(5.2)=6");
                 var points = pointsDecoder.DecodeToPoints(Console.ReadLine());
 
@@ -27,10 +37,8 @@ namespace Lagrange
                 Console.CursorLeft = targetPointString.Length;
 
                 var result = lagrangeEngine.CalculateLagrange(points, targetPoint);
-                Console.Write(result);
-
-                Console.WriteLine("\n\nPress any key to try again or ESCAPE to exit");
-            } while (Console.ReadKey().Key != ConsoleKey.Escape);
+                Console.Write(result);                
+            }
 
         }
 

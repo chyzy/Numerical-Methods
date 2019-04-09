@@ -8,7 +8,7 @@ namespace Hermite
     {
         static void Main(string[] args)
         {
-            _precision = 1e-10;
+            _precision = 1e-16;
 
             var input = new List<List<double>>()
             {
