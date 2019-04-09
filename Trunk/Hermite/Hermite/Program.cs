@@ -15,7 +15,7 @@ namespace Hermite
                 new List<double>() {0,7,3}, //x1,f(x1), f'(x1)...
                 new List<double>() {1,3},    //x2,f(x2), f'(x2)...
                 new List<double>() {2,-1},
-                new List<double>() {4,3},
+                new List<double>() {4,3,1},
                 new List<double>() {5,-3,1,2},
             };
 
